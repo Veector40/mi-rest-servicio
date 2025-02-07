@@ -14,20 +14,9 @@ provider "aws" {
 
 variable "region" {
   type    = string
-  default = "us-east-1"
+  default = "eu-central-1"
 }
 
-# Find Amazon linux 2 AMI
-data "aws_ami" "amazon_linux_2" {
-  most_recent = true
-  owners      = ["amazon"]
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-kernel-5.10-hvm-*-x86_64-gp2"]
-  }
-}
-
-# Security group for HTTP ingress
 resource "aws_security_group" "http_sg" {
   name        = "allow-http-traffic"
   description = "Allow inbound HTTP"
@@ -56,14 +45,12 @@ variable "GHCR_PAT" {
   sensitive   = true
 }
 
-# EC2 instance
 resource "aws_instance" "my_ec2" {
-  ami                         = data.aws_ami.amazon_linux_2.id
+  ami                         = "ami-07eef52105e8a2059"
   instance_type               = "t2.micro"
   vpc_security_group_ids      = [aws_security_group.http_sg.id]
   associate_public_ip_address = true
 
-  # Install Docker and run said container
   user_data = <<-EOF
     #!/bin/bash
     yum update -y
@@ -81,8 +68,8 @@ resource "aws_instance" "my_ec2" {
   }
 }
 
-# Provide a default VPC id
+
 variable "vpc_id" {
   type    = string
-  default = "vpc-xxxxxxxx"
+  default = "vpc-0f58585ee0776273f"
 }

@@ -1,0 +1,17 @@
+# Terraform state files (store sensitive data)
+terraform.tfstate
+terraform.tfstate.backup
+
+# Local Terraform settings
+.terraform/
+.terraform.lock.hcl
+
+# Sensitive variables (DO NOT PUSH if it contains secrets)
+terraform.tfvars
+
+# AWS credentials (DO NOT COMMIT)
+.aws/
+
+# Ignore logs and temp files
+*.log
+*.tfplan
