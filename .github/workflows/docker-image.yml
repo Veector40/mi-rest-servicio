@@ -16,7 +16,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t ghcr.io/Veector40/mi-rest-servicio:latest .
+        docker build -t ghcr.io/veector40/mi-rest-servicio:latest .
 
     - name: Log in to GitHub Container Registry
       run: |
