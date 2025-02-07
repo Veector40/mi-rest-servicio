@@ -16,8 +16,6 @@ jobs:
           terraform_version: "1.5.0"
       - name: Terraform init
         run: terraform init
-      - name: Import existing security group
-        run: terraform import aws_security_group.ssh_http sg-0d7f0b15b10ef84bd || true
       - name: Terraform format check
         run: terraform fmt -check
       - name: Terraform validate
