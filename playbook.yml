@@ -1,0 +1,33 @@
+---
+- name: Configure Ubuntu EC2 instance for Dockerized app
+  hosts: ubuntu
+  become: yes
+  vars:
+    ghcr_username: "veector40"
+    ghcr_image: "ghcr.io/veector40/mi-rest-servicio:latest"
+  tasks:
+  - name: Update apt cache
+    apt:
+      update_cache: yes
+  - name: Install Docker
+    apt:
+      name: docker.io
+      state: present
+  - name: Ensure Docker service is started
+    service:
+      name: docker
+      state: started
+      enabled: yes
+  - name: Add user to Docker group
+    user:
+      name: "{{ ansible_user }}"
+      groups: docker
+      append: yes
+  - name: Login to GHCR
+    shell: docker login ghcr.io -u {{ ghcr_username }} -p {{ ghcr_pat }}
+    args:
+      creates: /home/{{ ansible_user }}/.docker/config.json
+  - name: Pull Docker image from GHCR
+    shell: docker pull {{ ghcr_image }}
+  - name: Run Docker container
+    shell: docker run -d -p 80:80 {{ ghcr_image }}
