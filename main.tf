@@ -75,14 +75,6 @@ resource "aws_security_group" "ssh_http" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  lifecycle {
-    prevent_destroy = true
-    # minory diffs only
-    ignore_changes = [
-      ingress,
-      egress,
-    ]
-  }
 }
 
 resource "aws_instance" "al2023_instance" {
