@@ -14,9 +14,11 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: "1.5.0"
-      - name: Terraform Init
+      - name: Terraform init
         run: terraform init
-      - name: Terraform Plan
+      - name: Import existing security group
+        run: terraform import aws_security_group.ssh_http sg-0d7f0b15b10ef84bd || true
+      - name: Terraform plan
         run: terraform plan
-      - name: Terraform Apply
+      - name: Terraform apply
         run: terraform apply -auto-approve
