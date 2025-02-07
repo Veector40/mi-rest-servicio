@@ -71,9 +71,9 @@ resource "aws_instance" "my_ec2" {
     service docker start
     usermod -aG docker ec2-user
 
-    docker login ghcr.io -u Veector40 -p ${var.GHCR_PAT}
-    docker pull ghcr.io/Veector40/mi-rest-servicio:latest
-    docker run -d -p 80:80 ghcr.io/Veector40/mi-rest-servicio:latest
+    docker login ghcr.io -u veector40 -p ${var.GHCR_PAT}
+    docker pull ghcr.io/veector40/mi-rest-servicio:latest
+    docker run -d -p 80:80 ghcr.io/veector40/mi-rest-servicio:latest
   EOF
 
   tags = {

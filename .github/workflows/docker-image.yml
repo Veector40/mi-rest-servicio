@@ -24,4 +24,4 @@ jobs:
 
     - name: Push Docker image
       run: |
-        docker push ghcr.io/Veector40/mi-rest-servicio:latest
+        docker push ghcr.io/veector40/mi-rest-servicio:latest
