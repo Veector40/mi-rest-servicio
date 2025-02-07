@@ -6,6 +6,12 @@ terraform {
     }
   }
   required_version = ">= 1.0.0"
+
+  backend "s3" {
+    bucket = "my-terraform-state-bucket"
+    key    = "terraform/state.tfstate"
+    region = "eu-central-1"
+  }
 }
 
 provider "aws" {
@@ -45,43 +51,22 @@ data "aws_ami" "amazon_linux2023" {
   }
 }
 
-# Resources
-resource "aws_security_group" "ssh_http" {
-  name        = "allow-ssh-http"
-  description = "Allow inbound SSH (22) and HTTP (80)"
-  vpc_id      = "vpc-0f58585ee0776273f"
-
-  ingress {
-    description = "SSH from anywhere"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+data "aws_security_group" "ssh_http" {
+  filter {
+    name   = "group-name"
+    values = ["allow-ssh-http"]
   }
-
-  ingress {
-    description = "HTTP from anywhere"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  filter {
+    name   = "vpc-id"
+    values = ["vpc-0f58585ee0776273f"]
   }
-
-  egress {
-    description = "Allow all outbound"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
 }
 
 resource "aws_instance" "al2023_instance" {
   ami                         = data.aws_ami.amazon_linux2023.id
   instance_type               = var.instance_type
   subnet_id                   = var.subnet_id
-  vpc_security_group_ids      = [aws_security_group.ssh_http.id]
+  vpc_security_group_ids = [data.aws_security_group.ssh_http.id]
   associate_public_ip_address = true
   key_name                    = var.key_pair_name
 
