@@ -59,7 +59,7 @@ resource "aws_instance" "al2023_instance" {
   ami                         = data.aws_ami.amazon_linux2023.id
   instance_type               = var.instance_type
   subnet_id                   = var.subnet_id
-  vpc_security_group_ids = [data.aws_security_group.ssh_http.id]
+  vpc_security_group_ids      = [data.aws_security_group.ssh_http.id]
   associate_public_ip_address = true
   key_name                    = var.key_pair_name
 
