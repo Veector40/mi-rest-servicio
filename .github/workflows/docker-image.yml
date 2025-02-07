@@ -1,0 +1,27 @@
+name: Build and psuh docker image to GHCR
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Build Docker image
+      run: |
+        docker build -t ghcr.io/Veector40/mi-rest-servicio:latest .
+
+    - name: Log in to GitHub Container Registry
+      run: |
+        echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Push Docker image
+      run: |
+        docker push ghcr.io/Veector40/mi-rest-servicio:latest
