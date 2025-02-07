@@ -6,12 +6,6 @@ terraform {
     }
   }
   required_version = ">= 1.0.0"
-
-  backend "s3" {
-    bucket = "my-terraform-state-bucket"
-    key    = "terraform/state.tfstate"
-    region = "eu-central-1"
-  }
 }
 
 provider "aws" {
@@ -24,7 +18,6 @@ variable "region" {
   default = "eu-central-1"
 }
 
-# If you have multiple subnets, specify one in the same VPC (vpc-0f58585ee0776273f).
 variable "subnet_id" {
   type    = string
   default = "subnet-002831f6079855201"
@@ -70,7 +63,6 @@ resource "aws_instance" "al2023_instance" {
   associate_public_ip_address = true
   key_name                    = var.key_pair_name
 
-  # Minimal user_data script (optional). Add any bootstrapping commands if needed.
   user_data = <<-EOF
     #!/bin/bash
     yum update -y
